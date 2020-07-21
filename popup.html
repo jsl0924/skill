@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no, address=no, email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>jsl0924</title>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<style type="text/css">
+html,body{width:100%;height:100%;}
+
+body.lock{position:fixed;overflow:hidden;}
+.pop{position:absolute;top:0;left:0;right:0;width:100%;height:100%;display:none;z-index:100;}
+.pop.on{display:block;}
+.pop .bg{position:fixed;top:0;left:0;right:0;width:100%;height:100%;background:#000;opacity:.85;filter:aPOPha(opacity=85);}
+.pop img{width:100%;}
+.pop .pop_container{width:290px;position:fixed;left:50%;top:50%;transform: translate(-50%, -50%);}
+.pop a.btn_close{width:20px;height:20px;position:absolute;right:10px;top:0px;display:inline-block;}
+.pop .pop_cont{padding:25px;background:#fff;font-size:15px;text-align:center;}
+.pop .btn_area .btn_pack {width:100%;height:50px !important;line-height:50px !important; color:#fff;font-size:16px !important; font-weight:bold; background:#323743;border:0;}
+.pop .btn_area .btn_left {float:left; width:50%; border-right:1px solid #2b2f40;background:gray;}
+.pop .btn_area .btn_right {float:right; width:50%}
+</style>
+<script type="text/javascript">
+//popup open
+$.fn.openPOP = function(){
+	//배경 고정
+	var $posY = $(window).scrollTop();
+	$('body').addClass('lock');
+	$('body').css('top', -$posY);
+
+	//팝업 설정
+	$(this).addClass('on');
+}
+
+//popup close
+function closePOP(){
+	//배경 고정 해제
+	var $posY =  $('body').css('top').replace('-','');
+	$('body').css('top', '');
+	$('body').removeClass('lock');
+	$('html,body').animate({scrollTop: $posY},0);
+
+	//팝업 설정
+	$('.pop').removeClass('on');
+}
+</script>
+</head>
+<body>
+
+<div style="height:1000px;background:skyblue;">스크롤을 내려주세요</div>
+<div style="height:1000px;background:pink;">
+	<a href="javascript:;" onclick="$('#alert_POP').openPOP()">alert 버튼1개</a> <br>
+	<a href="javascript:;" onclick="$('#alert2_POP').openPOP()">alert 버튼2개</a> <br>
+</div>
+
+<!-- alert popup -->
+<div id="alert_POP" class="pop">
+	<div class="bg" onclick="closePOP();"></div>
+	<div class="pop_container">
+
+		<div class="pop_cont">
+			팝업버튼1 <br>
+			입니다.
+		</div>
+		<div class="pop_footer">
+			<div class="btn_area">
+				<button type="button" class="btn btn_pack" onclick="closePOP();">확인</button>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<!-- //alert popup -->
+
+
+<!-- alert popup -->
+<div id="alert2_POP" class="pop">
+	<div class="bg" onclick="closePOP();"></div>
+	<div class="pop_container">
+
+		<div class="pop_cont">
+			팝업버튼2 <br>
+			입니다.
+		</div>
+		<div class="pop_footer">
+			<div class="btn_area">
+				<button type="button" class="btn btn_pack btn_left" onclick="closePOP();">취소</button>
+				<button type="button" class="btn btn_pack btn_right">확인</button>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<!-- //alert popup -->
+
+
+</body>
+</html>

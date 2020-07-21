@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no, address=no, email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>jsl0924</title>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="survey.css">
+<script type="text/javascript">
+$(function() {
+	//버튼 press 처리
+	$(".btn").bind("touchstart",function(event){
+		$(this).addClass("active");
+	});
+	$(".btn").bind("touchend",function(event){
+		$(this).removeClass("active");
+	});
+
+	//이전,다음 버튼
+	$("#footer .btn_left").click(function(){
+		prev();
+	});
+	$("#footer .btn_right").click(function(){
+		check(i);
+	});
+
+	var i = 0;
+    var sv_list = $('.survey_box'); 
+
+	//prev
+	function prev(){
+		i--;
+		if(i == -1){
+			i = 0;
+		} else{
+			nav(i);
+			progress(i);
+		}
+	}
+
+	//next
+	function next(){
+		i++;
+		if(i < sv_list.length) {
+			nav(i);
+			progress(i);
+		} else{
+			i = sv_list.length-1;
+			alert('설문조사 종료!!'); // 설문조사 종료시 실행
+		}
+	}
+
+	//설문문항 활성화 on/off
+	function nav(i){
+		$(sv_list).each(function(index){
+			if(i == index){
+				$(this).addClass('on');
+			} else{
+				$(this).removeClass('on');
+			}
+		});
+		
+		$('.survey_title h3').removeClass('on');
+		if(i < 3){
+			$(".tit1").addClass('on');
+		} else if(i < 6){
+			$(".tit2").addClass('on');
+		} else{
+			$(".tit3").addClass('on');
+		}
+
+		//disabled 설정
+		var check1 = $(".survey_list input[name='sv" + (i + 1) + "']").is(":checked");
+		var check2 = $(".survey_textarea2").val();
+		var n = i + 1;
+
+		if(check1 == true){
+			$('#footer .btn_right').removeClass('disabled');
+		} else if(n == 7 && !check2 == ''){ //설문조사 07
+			$('#footer .btn_right').removeClass('disabled');
+		} else{
+			$('#footer .btn_right').addClass('disabled');
+		}
+	}
+
+	//설문 체크 여부 확인
+	function check(i){
+		var n = i + 1;
+		var checked = $(".survey_list input[name='sv" + n + "']").is(":checked");
+		var check2 = $(".survey_textarea2").val();
+
+		if(checked == true){
+			next();
+		} else if(n == 7 && !check2 == ''){ //설문조사 07
+			next();
+		}
+	}
+
+	//체크박스 설정
+	$('.survey_list input').click(function(){
+		//버튼(다음) disabled
+		$('#footer .btn_right').removeClass('disabled');
+
+		//체크박스 최대 선택 제한 (3개)
+		var cntEPT = $('.survey_list input:checkbox:checked').length;
+		if(cntEPT > 3){
+			$(this).prop('checked', false);
+		}
+
+		//textarea disabled 설정
+		if( $(".survey_list input.etc").is(":checked") ){
+			$('.survey_box .survey_textarea').attr('disabled', false);
+		} else{
+			$('.survey_box .survey_textarea').attr('disabled', true);
+		}
+	});
+
+	//textarea disabled 설정 (실시간 keyup 체크후)
+	$(".survey_textarea2").on("propertychange change keyup paste input", function() {
+		if(!$(this).val() == '') {
+			$('#footer .btn_right').removeClass('disabled');
+		} else{
+			$('#footer .btn_right').addClass('disabled');
+		}
+	});
+
+	//progress 설정
+	function progress(i){
+		var t = $('.survey_box').length;
+		var w = (i + 1) * (100 / t);
+		var num = (i + 1);
+		$('.progressbar i').css('width', w + '%'); //현재문항 progress 설정
+		$('.progressnumber span').html(num); // 현재문항수
+		$('.progressnumber i').html(t); // 총문항수
+	}
+	progress(i);
+
+});
+</script>
+</head>
+<body>
+<div id="wrap">
+	
+	<!-- header -->
+	<div id="header" class="new">
+		<button type="button" class="btn_LArea btn_back"><span>뒤로</span></button>
+		<h2 class="header_tit">설문 응답하기</h2>
+	</div>
+	<!-- //header -->
+	
+	<!-- container -->
+	<div id="container" class="survey survey_bg">
+		<div class="cont pb_82">
+
+			<!-- 설문조사 타이틀 -->
+			<div class="survey_title">
+				<p><img src="images/survey_tit.png" alt="설문 응답하기"></p>
+				<h3 class="tit1 on">설문조사를 위한 고객 기본정보 질문입니다.</h3>
+				<h3 class="tit2">노브랜드 이용패턴에 대한 질문입니다.</h3>
+				<h3 class="tit3">노브랜드 사용자 인식에 대한 질문입니다.</h3>
+			</div>
+			<!-- 설문조사 타이틀 -->
+
+			<!-- progress -->
+			<div class="survey_progress">
+				<div class="progressnumber"><span>현재문항수</span>/<i>총문항수</i></div>
+				<div class="progressbar"><span></span><i></i></div>
+			</div>
+			<!-- //progress -->
+
+			<!-- 설문조사 01 -->
+			<div class="survey_box survey1 on">
+				<dl>
+					<dt><span class="num">01</span><span class="txt">고객님의 거주지역을 선택해 주세요.</span></dt>
+					<dd>노브랜드 오프라인 매장방문에 해당합니다.</dd>
+				</dl>
+				<ul class="survey_list">
+					<li>
+						<input type="radio" id="sv1a" name="sv1" value="서울"><label for="sv1a"><span class="text">서울</span></label><!-- 20200313 label안 텍스트안에 span태그 생성됨 -->
+					</li>
+					<li>
+						<input type="radio" id="sv1b" name="sv1" value="경기"><label for="sv1b"><span class="text">경기</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv1c" name="sv1" value="인천"><label for="sv1c"><span class="text">인천</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv1d" name="sv1" value="부산"><label for="sv1d"><span class="text">부산</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv1e" name="sv1" value="대구"><label for="sv1e"><span class="text">대구</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv1f" name="sv1" value="대전"><label for="sv1f"><span class="text">대전</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv1g" name="sv1" value="광주"><label for="sv1g"><span class="text">광주</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv1h" name="sv1" value="기타"><label for="sv1h"><span class="text">기타</span></label>
+					</li>
+				</ul>
+			</div>
+			<!-- //설문조사 01 -->
+
+			<!-- 설문조사 02 -->
+			<div class="survey_box survey2">
+				<dl>
+					<dt><span class="num">02</span><span class="txt">고객님의 거주형태를 선택해 주세요.</span></dt>
+					<dd>노브랜드 오프라인 매장방문에 해당합니다.</dd>
+				</dl>
+				<ul class="survey_list">
+					<li>
+						<input type="radio" id="sv2a" name="sv2" value="아파트"><label for="sv2a"><span class="text">아파트</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv2b" name="sv2" value="주택"><label for="sv2b"><span class="text">주택</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv2c" name="sv2" value="오피스텔"><label for="sv2c"><span class="text">오피스텔</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv2d" name="sv2" value="기타"><label for="sv2d"><span class="text">기타</span></label>
+					</li>
+				</ul>
+			</div>
+			<!-- //설문조사 02 -->
+
+			<!-- 설문조사 03 -->
+			<div class="survey_box survey3">
+				<dl>
+					<dt><span class="num">03</span><span class="txt">결혼여부를 선택해 주세요.</span></dt>
+					<dd>노브랜드 오프라인 매장방문에 해당합니다.</dd>
+				</dl>
+				<ul class="survey_list">
+					<li>
+						<input type="radio" id="sv3a" name="sv3" value="미혼"><label for="sv3a"><span class="text">미혼</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv3b" name="sv3" value="기혼"><label for="sv3b"><span class="text">기혼</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv3c" name="sv3" value="기타"><label for="sv3c"><span class="text">기타</span></label>
+					</li>
+				</ul>
+			</div>
+			<!-- //설문조사 03 -->
+
+			<!-- 설문조사 04 -->
+			<div class="survey_box survey4">
+				<dl>
+					<dt><span class="num">04</span><span class="txt">노브랜드에는 월 평균 몇 회 정도 방문하시나요?</span></dt>
+					<dd>노브랜드 오프라인 매장방문에 해당합니다.</dd>
+				</dl>
+				<ul class="survey_list">
+					<li>
+						<input type="radio" id="sv4a" name="sv4" value="1~2회"><label for="sv4a"><span class="text">1~2회</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv4b" name="sv4" value="3~4회"><label for="sv4b"><span class="text">3~4회</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv4c" name="sv4" value="5회 이상"><label for="sv4c"><span class="text">5회 이상</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv4d" name="sv4" value="방문하지 않는다"><label for="sv4d"><span class="text">방문하지 않는다</span></label>
+					</li>
+				</ul>
+			</div>
+			<!-- //설문조사 04 -->
+
+			<!-- 설문조사 05 -->
+			<div class="survey_box survey5">
+				<dl>
+					<dt><span class="num">05</span><span class="txt">노브랜드에 방문하는 이유를 선택해 주세요. </span><span class="hint">(최대 3개 선택가능)</span></dt>
+					<dd>노브랜드 오프라인 매장방문에 해당합니다.</dd>
+				</dl>
+				<ul class="survey_list">
+					<li>
+						<input type="checkbox" id="sv5a" name="sv5" value="상품의 질"><label for="sv5a"><span class="text">상품의 질</span></label>
+					</li>
+					<li>
+						<input type="checkbox" id="sv5b" name="sv5" value="서비스 응대"><label for="sv5b"><span class="text">서비스 응대</span></label>
+					</li>
+					<li>
+						<input type="checkbox" id="sv5c" name="sv5" value="매장 분위기"><label for="sv5c"><span class="text">매장 분위기</span></label>
+					</li>
+					<li>
+						<input type="checkbox" id="sv5d" name="sv5" value="가격"><label for="sv5d"><span class="text">가격</span></label>
+					</li>
+					<li>
+						<input type="checkbox" id="sv5e" name="sv5" value="기타"><label for="sv5e"><span class="text">기타</span></label>
+					</li>
+				</ul>
+			</div>
+			<!-- //설문조사 05 -->
+
+			<!-- 설문조사 06 -->
+			<div class="survey_box survey6">
+				<dl>
+					<dt><span class="num">06</span><span class="txt">노브랜드에서 가장 불만족한 서비스를<br> 선택해 주세요.</span></dt>
+					<dd>노브랜드 오프라인 매장방문에 해당합니다.</dd>
+				</dl>
+				<ul class="survey_list">
+					<li>
+						<input type="radio" id="sv6a" name="sv6" value="상품의 질"><label for="sv6a"><span class="text">상품의 질</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv6b" name="sv6" value="서비스 응대"><label for="sv6b"><span class="text">서비스 응대</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv6c" name="sv6" value="매장 분위기"><label for="sv6c"><span class="text">매장 분위기</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv6d" name="sv6" value="가격"><label for="sv6d"><span class="text">가격</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv6e" name="sv6" value="기타" class="etc"><label for="sv6e"><span class="text">기타</span></label>
+					</li>
+				</ul>
+				<textarea id="sv6f"  name="sv6" class="survey_textarea" cols="30" rows="10" maxlength="500" placeholder="기타 답변을 작성해 주세요." disabled></textarea>
+				<p class="tip">※ 최대 500자까지 입력가능</p>
+			</div>
+			<!-- //설문조사 06 -->
+
+			<!-- 설문조사 07 -->
+			<div class="survey_box survey7">
+				<dl>
+					<dt><span class="num">07</span><span class="txt">노브랜드에서 출시했으면 하는 상품을 <br>작성해 주세요.</span></dt>
+					<dd>노브랜드 오프라인 매장방문에 해당합니다.</dd>
+				</dl>
+				<div class="survey_list">
+					<textarea id="sv7a" name="sv7" class="survey_textarea2" cols="30" rows="10" maxlength="500" placeholder="답변을 작성해 주세요."></textarea>
+				</div>
+			</div>
+			<!-- //설문조사 07 -->
+
+			<!-- 설문조사 08 -->
+			<div class="survey_box survey8">
+				<dl>
+					<dt><span class="num">08</span><span class="txt">'노브랜드'하면 떠오르는 첫번째 이미지를<br> 선택해주세요.</span></dt>
+					<dd>노브랜드 오프라인 매장방문에 해당합니다.</dd>
+				</dl>
+				<p class="img_tit"><img src="images/img_thumb1.png" alt=""></p>
+				<ul class="survey_list">
+					<li>
+						<input type="radio" id="sv8a" name="sv8" value="저렴한 가격"><label for="sv8a"><span class="text">저렴한 가격</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv8b" name="sv8" value="이마트"><label for="sv8b"><span class="text">이마트</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv8c" name="sv8" value="가성비"><label for="sv8c"><span class="text">가성비</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv8d" name="sv8" value="없다"><label for="sv8d"><span class="text">없다</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv8e" name="sv8" value="기타"><label for="sv8e"><span class="text">기타</span></label>
+					</li>
+				</ul>
+			</div>
+			<!-- //설문조사 08 -->
+
+			<!-- 설문조사 09 -->
+			<div class="survey_box survey9">
+				<dl>
+					<dt><span class="num">09</span><span class="txt">노브랜드에서 출시헀으면 하는 상품 군을 <br>작성해 주세요.</span></dt>
+					<dd>노브랜드 오프라인 매장방문에 해당합니다.</dd>
+				</dl>
+				<ul class="survey_list">
+					<li>
+						<input type="radio" id="sv9a" name="sv9" value="신선식품"><label for="sv9a"><img src="images/img_thumb2.png" alt=""><span class="text">신선식품</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv9b" name="sv9" value="가공식품"><label for="sv9b"><img src="images/img_thumb3.png" alt=""><span class="text">가공식품</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv9c" name="sv9" value="생활용품"><label for="sv9c"><img src="images/img_thumb3.png" alt=""><span class="text">생활용품</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv9d" name="sv9" value="가전/인테리어"><label for="sv9d"><img src="images/img_thumb3.png" alt=""><span class="text">가전/인테리어</span></label>
+					</li>
+					<li>
+						<input type="radio" id="sv9e" name="sv9" value="기타"><label for="sv9e"><img src="images/img_default.png" alt=""><span class="text">기타</span></label>
+					</li>
+				</ul>
+			</div>
+			<!-- //설문조사 09 -->
+		</div> 
+
+	</div>
+	<!-- //container -->
+	
+	<!-- footer -->
+	<div id="footer">
+		<div class="btn_area">
+			<button type="button" class="btn btn_left">이전</button>
+			<button type="button" class="btn btn_right disabled">다음</button>
+		</div>
+	</div>
+	<!-- //footer -->
+
+</div>
+</body>
+</html>

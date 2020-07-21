@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no, address=no, email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>게시판 리스트</title>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<script>
+function paging(num){
+	var min = (num - 1) * 6,
+	max = num * 6;
+
+	$('.media>ul>li').hide().filter(function(){
+		var idx = $(this).index();
+		return idx >= min && idx < max;
+	}).show();
+}
+
+$(document).ready(function(){
+	var pageNum = 1;
+	var totalNum = $('.media>ul>li').length;
+
+	$('.btn_prev').on('click', function(){
+		if(pageNum == 1){
+			return false;
+		}
+		paging(--pageNum);
+	})
+
+	$('.btn_next').on('click', function(){
+		if(pageNum >= Math.ceil(totalNum / 6)){
+			return false;
+		}
+		paging(++pageNum);
+	})
+
+	paging(pageNum);
+});
+</script>
+</head>
+<body>
+
+	<div class="media">
+		<ul>
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+			<li>6</li>
+			<li>7</li>
+			<li>8</li>
+			<li>10</li>
+			<li>11</li>
+			<li>12</li>
+			<li>13</li>
+			<li>14</li>
+			<li>15</li>
+			<li>16</li>
+			<li>17</li>
+			<li>18</li>
+		</ul>
+	</div>
+  <button class="btn_prev">prev</button>
+  <button class="btn_next">next</button>
+
+
+</body>
+</html>

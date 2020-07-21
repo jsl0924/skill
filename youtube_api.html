@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title> Document </title>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+
+</head>
+<body>
+
+<div id="player"></div>
+<input type="button" value="재생" onclick="player.playVideo()">
+<input type="button" value="멈춤" onclick="player.pauseVideo()">
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+
+    var player;
+    function onYouTubePlayerAPIReady() {
+        createYTPlayer();
+    }
+
+    function createYTPlayer(){
+        player = new YT.Player('player', {
+          height: '360',
+          width: '640',
+          videoId: 'o4Je1i9umbg',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }, playerVars: {
+            'autoplay' : '1',
+            'controls' : '0',
+            'showinfo' : '0',
+            'rel' : '0',                    //추천영상 제거
+            'wmode' : 'opaque'
+            }
+        });
+    }
+
+    // autoplay video
+    function onPlayerReady(event) {
+        event.target.setPlaybackQuality('hd720');      //화질 디폴트 설정
+    }
+
+    // when video starts
+    function onPlayerStateChange(event) {
+        //console.log(event.data);
+        if(event.data == 1) {
+            isPlayed=1;
+        }
+    }
+
+
+</script>
+</body>
+</html>

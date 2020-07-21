@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style type="text/css">
+*{margin:0;padding:0;}
+
+#gameContainer{width:508px; height:671px; position: relative;margin:0px auto;}
+#gameContainer .board_start{z-index: 5;}
+
+#gameContainer .board_bg{width:508px; height:508px; top:40px; left:0px; z-index: 2;}
+#gameContainer .board_bg img{width:100%;}
+#gameContainer .board_on{width:508px; height:508px; position: absolute;top:40px; left:0px; z-index: 3; background-image: url('img/roulette_circle_bg.png');    background-size: 508px;}
+#gameContainer .board_on img{width:100px; height:100px; position:absolute;top:0;}
+#gameContainer .board_on img:nth-child(1){left: 55px; top: 120px; transform: rotate(-60deg); }
+#gameContainer .board_on img:nth-child(2){left: 62px; top: 286px; transform: rotate(-113deg);}
+#gameContainer .board_on img:nth-child(3){left: 208px; top: 372px; transform: rotate(-180deg);}  
+#gameContainer .board_on img:nth-child(4){left: 351px; top: 286px; transform: rotate(-245deg);}
+#gameContainer .board_on img:nth-child(5){left: 351px; top: 125px; transform: rotate(-292deg);}
+#gameContainer .board_on img:nth-child(6){left: 205px; top: 42px;  transform: rotate(5deg);}  
+
+.popup{display: none; position: fixed; left: 50%; z-index: 99999; text-align: center; background:#fff; font-size:20px; color:#000;}
+.popup .close{display:inline-block; width:150px; height:50px; line-height:50px; color:#fff; background:#333; margin: 30px 0 0;text-decoration:none;} 
+#fade{display: none;background: #000;position: fixed;left: 0;top: 0;width: 100%;height: 100%;opacity: .60;z-index: 9999;}
+#popup_gift{width:475px; height:505px; top:120px;}
+#popup_gift .lottery_present {text-align:center;}
+#popup_gift .lottery_present img{display:block; margin: 50px auto 30px;}
+</style>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/easing/EasePack.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenLite.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/plugins/CSSPlugin.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+</head>
+<body>
+
+<div id="wrap">
+
+    <div id="gameContainer">	
+        <div class="board_start btn_start"><button>시작버튼</button></div>
+        <div class="board_on"></div>       
+    </div>
+
+	<!-- 당첨팝업 -->
+    <div id="popup_gift" class="popup">
+        <div class="lottery_present"></div>
+         <a href="#" class="close">닫기 </a>
+    </div>
+
+</div>
+
+<script>
+$(document).ready(function() {
+	var gift;
+    var present =[1,2,3,4,5,6];
+	
+	//쿠폰이미지
+	for(i=1; i<7; i++){
+	  var pictures = "img/coupon"+ i + ".png";
+	  $(".board_on").append('<img  src="' + pictures + '" />');
+	}
+ 
+	//rotation 회전
+	iniGame = function(num){
+		gift = num;
+		TweenLite.killTweensOf($(".board_on"));
+		TweenLite.to($(".board_on"), 0, {css:{rotation:rotationPos[gift]}});
+		TweenLite.from($(".board_on"),5, {css:{rotation:-3000}, onComplete:endGame, ease:Sine.easeOut});
+        console.log("gift 숫자 : "+ (gift +1) +"rotationPos" + rotationPos );
+	}
+	var rotationPos = new Array(60,120,180,240,300,360);
+
+    //시작시 회전
+	TweenLite.to($(".board_on"), 360, {css:{rotation:4000}, ease: Linear.easeNone});
+	
+	//당첨 endGame
+    function endGame(){
+        var  copImg= "img/coupon"+ (gift +1) + ".png";
+        console.log("이미지 : " + copImg );
+
+        $("#popup_gift .lottery_present" ).text(function( ) {   
+            return "축하드립니다." + present[gift] + " 룰렛숫장"+ (gift +1) + " 당첨 되셨습니다.";    
+        });
+
+        $( '<img  src="' + copImg+ '" />' ).prependTo("#popup_gift .lottery_present");
+
+        setTimeout(function() {
+             openPopup("popup_gift");	
+        }, 1000);
+    }
+
+    //popup
+	function openPopup(id) {
+		closePopup();
+		$('.popup').slideUp(0);
+		var popupid = id
+		$('body').append('<div id="fade"></div>');
+		$('#fade').css({
+		    'filter' : 'alpha(opacity=60)'
+		}).fadeIn(300);
+		var popuptopmargin = ($('#' + popupid).height()) / 2;
+		var popupleftmargin = ($('#' + popupid).width()) / 2;
+		$('#' + popupid).css({
+			'margin-left' : -popupleftmargin
+		});
+		$('#' + popupid).slideDown(500);
+	}
+
+	function closePopup() {
+		$('#fade').fadeOut(300);
+		$('.popup').slideUp(400);
+		return false
+	}
+	$(".popup .close").click(closePopup);
+
+    //시작버튼
+    var clicked = 0;
+	$(".btn_start").on("click",function(){
+	    if( clicked <= 0){    
+          iniGame( Math.floor(Math.random() * 6) );       
+        }
+	    else if( clicked >=1 ){    
+            event.preventDefault(); 
+			alert( "이벤트에 이미 참여 하셨습니다!!"); 
+        }
+	    clicked ++
+	});
+
+})
+</script>
+
+</body>
+</html>

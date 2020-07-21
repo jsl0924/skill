@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no, address=no, email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>jsl0924</title>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<style type="text/css">
+#nav{width:500px;margin:0 auto;}
+ul::after{content: '';clear: both;display: block;}
+ul li{width:100px;height:30px;background:#ccc;float:left;list-style: none;}
+ul li a{width:100%;height:100%;display:inline-block;}
+ul li.has-sub{background: pink;}
+ul li ul{display:none;}
+</style>    
+</head>
+<body>
+    <div id="nav">
+        <ul>
+            <li class="has-sub"><a href="">메뉴1</a>
+                <ul>
+                    <li><a href="">서브1</a></li>
+                    <li><a href="">서브2</a></li>
+                    <li><a href="">서브3</a></li>
+                    <li><a href="">서브4</a></li>
+                </ul>
+            </li>
+            <li class="has-sub"><a href="">메뉴2</a>
+                <ul>
+                    <li><a href="">서브1</a></li>
+                    <li><a href="">서브2</a></li>
+                    <li><a href="">서브3</a></li>
+                    <li><a href="">서브4</a></li>
+                </ul>
+            </li>
+            <li class="has-sub"><a href="">메뉴3</a>
+                <ul>
+                    <li><a href="">서브1</a></li>
+                    <li><a href="">서브2</a></li>
+                    <li><a href="">서브3</a></li>
+                    <li><a href="">서브4</a></li>
+                </ul>
+            </li>
+            <li class="has-sub"><a href="">메뉴4</a>
+                <ul>
+                    <li><a href="">서브1</a></li>
+                    <li><a href="">서브2</a></li>
+                    <li><a href="">서브3</a></li>
+                    <li><a href="">서브4</a></li>
+                </ul>
+            </li>
+            <li class="has-sub"><a href="">메뉴5</a>
+                <ul>
+                    <li><a href="">서브1</a></li>
+                    <li><a href="">서브2</a></li>
+                    <li><a href="">서브3</a></li>
+                    <li><a href="">서브4</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <script type="text/javascript">
+    $("#nav .has-sub").mouseenter(function(){
+	    $("#nav .has-sub ul").stop().slideDown(200);    
+    });
+    $("#nav .has-sub").mouseleave(function(){
+        $("#nav .has-sub ul").stop().slideUp(200);
+    });
+    </script>
+</body>
+</html>

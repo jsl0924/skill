@@ -1,0 +1,46 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no, address=no, email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>jsl0924</title>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<style>
+html,body { height: 100%; margin: 0; padding: 0; }
+ 
+#wrapper {
+min-height: 100%; /* relative 선언을 통해 하단바의 absolute position 이 정확한 위치에 오도록 한다.*/
+position: relative;
+background: #0202F7;
+}
+ 
+#wrapper #header {
+height: 70px;
+background-color: white;
+}
+ 
+#wrapper #content {/* 하단바가 표시되는 공간 부여*/
+padding-bottom: 50px;
+}
+ 
+#wrapper #footer {/* 하단바를 하단에 고정*/
+position: absolute;
+bottom: 0;
+width: 100%;
+height: 50px;
+background-color: silver;
+}
+</style>
+</head>
+
+<body>
+<div id="wrapper">
+	<div id="header">HEADER</div>
+	<div id="content">CONTENT</div>
+	<div id="footer">FOOTER</div>
+</div>
+</body>
+</html>

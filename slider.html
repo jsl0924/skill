@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no, address=no, email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>jsl0924</title>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<style type="text/css">
+#box{width:100px;overflow:hidden;}
+ul{width:500px;position:relative;}
+ul::after{content:""; display:block; clear:both;}
+ul li{width:100px;height:100px;float:left;list-style:none;}
+ul li:nth-child(1){background:skyblue;}
+ul li:nth-child(2){background:slateblue;}
+ul li:nth-child(3){background:blue;}
+ul li:nth-child(4){background:greenyellow;}
+ul li:nth-child(5){background:orange;}
+
+ol{width:100%;margin:20px 0;}
+ol::after{content:""; display:block; clear:both;}
+ol li{width:10px;height:10px;float:left;margin-right:5px;list-style:none;}
+ol li a{width:100%;height:100%;background:#ccc;text-decoration:none;display:block;font-size:0;}
+ol li a.on{background:red;}
+</style>
+</head>
+<body>
+    <div id="box">
+        <ul id="list">
+            <li>박스0</li>
+            <li>박스1</li>
+            <li>박스2</li>
+            <li>박스3</li>
+            <li>박스4</li>
+        </ul>
+        <ol id="nav">
+            <li><a href="" class="on">0</a></li>
+            <li><a href="">1</a></li>
+            <li><a href="">2</a></li>
+            <li><a href="">3</a></li>
+            <li><a href="">4</a></li>
+        </ol>
+        <input type="button" id="btn_prev" value="prev" />
+        <input type="button" id="btn_next" value="next" />
+    </div>
+
+    <script>
+    $(function(){
+        slider();
+    });
+    
+    function slider(){
+        // var
+        var i = 0;
+        var list = $('#list li'); 
+
+        //btn prev
+        $('#btn_prev').click(function(){
+            prev();
+        });
+        
+        //btn next
+        $('#btn_next').click(function(){
+            next();
+        });
+
+        //function next
+        function next(){
+            i++;
+            if( i < list.length) {
+                $('#list').animate(
+                    {left : '-=100px'},500
+                );
+                nav(i);
+            } else{
+                i = list.length-1;
+            }
+        }
+        
+        //function prev
+        function prev(){
+            i--;
+            if( i == -1 ){
+                i = 0;
+            }
+            else{
+                $('#list').animate(
+                    {left : '+=100px'},500
+                );
+                nav(i);
+            }    
+        }
+        
+        //function nav
+        function nav(i){
+            $('#nav li').each(function(index){
+                if( i == index){
+                    $(this).children('a').addClass('on');
+                } else{
+                    $(this).children('a').removeClass('on');
+                }
+            });
+        }
+
+        //btn nav
+        $('#nav li a').click(function(){
+            var e = $(this).parents().index();
+            i = e; // i값과 e값을 같게함
+            var move = e * -100 + ('px');
+            $('#box').find('#list').animate(
+                {left : move},500
+            );
+            nav(i);
+            return false;
+        });
+
+    }
+    </script>
+
+</body>
+</html>
